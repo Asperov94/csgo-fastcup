@@ -3,5 +3,5 @@ script:
   - ping asperitys.com
 branches:
   only:
-  - master
+  - main
 
