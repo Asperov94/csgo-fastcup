@@ -1,2 +1,7 @@
 language: python
-script: ping asperitys.com
+script: 
+  - ping asperitys.com
+branches:
+  only:
+  - master
+
