@@ -1,0 +1,4 @@
+*.txt
+*.css
+/env/*
+!requirements.txt
