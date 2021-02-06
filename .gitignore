@@ -1,4 +1,4 @@
 *.txt
-*.css
+*.csv
 /env/*
 !requirements.txt
