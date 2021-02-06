@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request
 from flask import render_template
 from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
 from bs4 import BeautifulSoup
 from time import sleep
@@ -9,9 +10,14 @@ from flask import send_file
 import re
 import requests
 
+def csgomapname(csgo_map):
+    result = re.findall(r"match(.*?)/", csgo_map)
+    result = 'https://csgo.fastcup.net/match' + ''.join(result)
+    return result
 
 def csgonamemap(csgo_map):
-    driver = webdriver.Chrome()
+    driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.CHROME)
+    #driver = webdriver.Chrome()
     driver.get(csgo_map)
     main_page = driver.page_source
 
@@ -20,20 +26,13 @@ def csgonamemap(csgo_map):
     driver.quit()
     return soup.findAll("div", {"class": "_2Fhou"})[2].text
 
-
-
-def csgomapname(csgo_map):
-    result = re.findall(r"match(.*?)/", csgo_map)
-    result = 'https://csgo.fastcup.net/match' + ''.join(result)
-    print (str(result))
-    return result
-
 def csgo_read(csgo_map, csgonamemap):
     #===VARIABLES===
     user=kill=dead=assist=''
     #===---===
     csgo_map = csgo_map + '/stats'
-    driver = webdriver.Chrome()
+    driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.CHROME)
+    #driver = webdriver.Chrome()
     driver.get(csgo_map)
     main_page = driver.page_source
     try:
@@ -44,14 +43,10 @@ def csgo_read(csgo_map, csgonamemap):
         os.remove('csv.csv')
     except OSError:
         pass
-    
     with open("stat.txt", "w") as file:
     	file.write(main_page)
-
     stat = open('stat.txt', 'r')
-
     soup = BeautifulSoup(stat, "html.parser")
-
     user_all = soup.findAll("div", {"class": "_2Q_mv"})
     csv = open('csv.csv', 'w')
     for i in user_all:
@@ -73,9 +68,7 @@ def csgo_read(csgo_map, csgonamemap):
     sleep(5)
     driver.quit()
     
-
 app = Flask(__name__)
-
 
 @app.route('/', methods=['GET'])
 def index():
@@ -85,14 +78,11 @@ def index():
 def index_post():
     csmap=''
     csgo_map = request.form.get('csgo_map')
-    print (str(csgo_map))
     csgo_map = csgomapname(csgo_map)
     csgonamemap1 = csgonamemap(csgo_map)
 
     csgo_read(csgo_map, csgonamemap1)
-
     return send_file(os.path.join("." , "csv.csv"), as_attachment=True)
-
 
 if __name__ == '__main__':
     app.run(port=5000)
