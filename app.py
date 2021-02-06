@@ -16,7 +16,7 @@ def csgomapname(csgo_map):
     return result
 
 def csgonamemap(csgo_map):
-    driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.CHROME)
+    driver = webdriver.Remote("http://selenium-chrome:4444/wd/hub", DesiredCapabilities.CHROME)
     #driver = webdriver.Chrome()
     driver.get(csgo_map)
     main_page = driver.page_source
@@ -31,7 +31,7 @@ def csgo_read(csgo_map, csgonamemap):
     user=kill=dead=assist=''
     #===---===
     csgo_map = csgo_map + '/stats'
-    driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.CHROME)
+    driver = webdriver.Remote("http://selenium-chrome:4444/wd/hub", DesiredCapabilities.CHROME)
     #driver = webdriver.Chrome()
     driver.get(csgo_map)
     main_page = driver.page_source
@@ -85,4 +85,4 @@ def index_post():
     return send_file(os.path.join("." , "csv.csv"), as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host="0.0.0.0", port=5000)
