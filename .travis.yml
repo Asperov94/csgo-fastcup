@@ -1,23 +1,23 @@
+---
 language: python
 script:
-- ssh start_docker@asperitys.com 'mkdir -p /data/csgo'
-- ls -lah
-- scp -r * start_docker@asperitys.com:/data/csgo/
-- ssh start_docker@asperitys.com 'cd /data/csgo && docker-compose build '
-- ssh start_docker@asperitys.com 'cd /data/csgo && docker-compose up -d'
+  - ssh start_docker@asperitys.com 'mkdir -p /data/csgo'
+  - ls -lah
+  - scp -r * start_docker@asperitys.com:/data/csgo/
+  - ssh start_docker@asperitys.com 'cd /data/csgo && docker-compose build '
+  - ssh start_docker@asperitys.com 'cd /data/csgo && docker-compose up -d'
 branches:
   only:
-  - main
+    - main
 addons:
   ssh_known_hosts:
-  - asperitys.com
+    - asperitys.com
 before_install:
-- openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv
-  -in deploy_rsa.enc -out deploy_rsa -d
-- eval "$(ssh-agent -s)"
-- chmod 600 deploy_rsa
-- ssh-add deploy_rsa
-- pip install yamllint
-- pip install pylint
-- yamllint --strict $(git ls-files '*.yaml' '*.yml')
-- pylint *.py
+  - openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv -in deploy_rsa.enc -out deploy_rsa -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 deploy_rsa
+  - ssh-add deploy_rsa
+  - pip install yamllint
+  - pip install pylint
+  - yamllint --strict $(git ls-files '*.yaml' '*.yml')
+  - pylint *.py

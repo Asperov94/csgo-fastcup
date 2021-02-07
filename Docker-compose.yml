@@ -2,7 +2,7 @@
 version: '3'
 
 services:
-  selenium-chrome: 
+  selenium-chrome:
     image: selenium/standalone-chrome
     ports:
       - 4444:4444
@@ -21,4 +21,3 @@ networks:
   selenium:
     external:
       name: selenium
- #
