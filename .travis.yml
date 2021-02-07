@@ -5,7 +5,7 @@ script:
   - echo $SSH_PRIVATE_KEY | tr -d '\r' | ssh-add -
   - ssh $MYSECRETUSER@asperitys.com 'mkdir -p /data/csgo'
   - ls -lah
-  - echo 1
+  - scp -r . $MYSECRETUSER@asperitys.com:~
 branches:
   only:
   - main
