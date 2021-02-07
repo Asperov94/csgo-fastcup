@@ -1,5 +1,6 @@
 language: python
 script:
+- ls -lah
 - ssh start_docker@asperitys.com 'mkdir -p /data/csgo'
 - ls -lah
 - scp -r . start_docker@asperitys.com:/data/csgo/
