@@ -8,6 +8,7 @@ script:
   - ls -lah
   - scp -r . $MYSECRETUSER@asperitys.com:/data/csgo/
   - ssh $MYSECRETUSER@asperitys.com 'cd /data/csgo && docker-compose up -d'
+  - exit
 branches:
   only:
   - main
