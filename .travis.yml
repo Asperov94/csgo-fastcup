@@ -1,9 +1,5 @@
 language: python
 script:
-#- which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
-#- eval $(ssh-agent -s)
-#- echo $SSH_PRIVATE_KEY
-#- echo $SSH_PRIVATE_KEY | tr -d '\r' | ssh-add -
 - ssh start_docker@asperitys.com 'mkdir -p /data/csgo'
 - ls -lah
 - scp -r . start_docker@asperitys.com:/data/csgo/
@@ -17,4 +13,4 @@ before_install:
   -in my_start_docker.enc -out my_start_docker -d
 addons:
   ssh_known_hosts:
-    - asperitys.com
+  - asperitys.com
