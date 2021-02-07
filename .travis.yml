@@ -5,8 +5,8 @@ script:
   - echo $SSH_PRIVATE_KEY | tr -d '\r' | ssh-add -
   - ssh $MYSECRETUSER@asperitys.com 'mkdir -p /data/csgo'
   - ls -lah
-  - scp -r . $MYSECRETUSER@asperitys.com:~
-  - echo 1
+  - scp -r . $MYSECRETUSER@asperitys.com:/data/csgo/
+  - ssh $MYSECRETUSER@asperitys.com 'cd /data/csgo && docker-compose up -d'
 branches:
   only:
   - main
