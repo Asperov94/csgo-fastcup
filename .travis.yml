@@ -3,6 +3,7 @@ script:
 - ssh start_docker@asperitys.com 'mkdir -p /data/csgo'
 - ls -lah
 - scp -r * start_docker@asperitys.com:/data/csgo/
+- ssh start_docker@asperitys.com 'cd /data/csgo && docker-compose build '
 - ssh start_docker@asperitys.com 'cd /data/csgo && docker-compose up -d'
 branches:
   only:
