@@ -6,6 +6,7 @@ script:
   - ssh $MYSECRETUSER@asperitys.com 'mkdir -p /data/csgo'
   - ls -lah
   - scp -r . $MYSECRETUSER@asperitys.com:~
+  - echo 1
 branches:
   only:
   - main
