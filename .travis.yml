@@ -4,7 +4,6 @@ script:
 - ls -lah
 - scp -r . start_docker@asperitys.com:/data/csgo/
 - ssh start_docker@asperitys.com 'cd /data/csgo && docker-compose up -d'
-- exit
 branches:
   only:
   - main
