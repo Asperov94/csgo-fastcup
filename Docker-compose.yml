@@ -8,7 +8,7 @@ services:
       - 4444:4444
     networks:
       selenium:
-  app:
+  csgo:
     build: .
     ports:
       - 5000:5000
@@ -19,5 +19,4 @@ networks:
     external:
       name: outside-network
   selenium:
-    external:
-      name: selenium
+    driver: bridge
