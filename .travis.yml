@@ -8,9 +8,7 @@ script:
 branches:
   only:
   - main
-before_install:
-- openssl aes-256-cbc -K $encrypted_3fb5f5304c72_key -iv $encrypted_3fb5f5304c72_iv
-  -in my_start_docker.enc -out my_start_docker -d
+
 addons:
   ssh_known_hosts:
   - asperitys.com
