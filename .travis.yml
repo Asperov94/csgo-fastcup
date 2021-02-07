@@ -3,7 +3,8 @@ script:
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
   - echo $SSH_PRIVATE_KEY | tr -d '\r' | ssh-add -
-  - ssh $MYSECRETUSER@asperitys.com hostmame
+  - ssh $MYSECRETUSER@asperitys.com 'mkdir -p /data/csgo'
+  - ls -lah
 branches:
   only:
   - main
