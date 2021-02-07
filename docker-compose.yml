@@ -14,6 +14,7 @@ services:
       - 5000:5000
     networks:
       outside-network:
+      selenium:
 networks:
   outside-network:
     external:
