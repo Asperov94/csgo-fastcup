@@ -4,10 +4,10 @@ script:
 #- eval $(ssh-agent -s)
 #- echo $SSH_PRIVATE_KEY
 #- echo $SSH_PRIVATE_KEY | tr -d '\r' | ssh-add -
-- ssh $MYSECRETUSER@asperitys.com 'mkdir -p /data/csgo'
+- ssh start_docker@asperitys.com 'mkdir -p /data/csgo'
 - ls -lah
-- scp -r . $MYSECRETUSER@asperitys.com:/data/csgo/
-- ssh $MYSECRETUSER@asperitys.com 'cd /data/csgo && docker-compose up -d'
+- scp -r . start_docker@asperitys.com:/data/csgo/
+- ssh start_docker@asperitys.com 'cd /data/csgo && docker-compose up -d'
 - exit
 branches:
   only:
