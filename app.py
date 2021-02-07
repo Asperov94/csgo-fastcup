@@ -73,11 +73,11 @@ def csgo_read(csgo_map, csgonamemap1):
     sleep(5)
     driver.quit()
 app = Flask(__name__)
-@app.route('/', methods=['GET'])
+@app.route('/csgo', methods=['GET'])
 def index():
     """Это докстринг модуля, он однострочный."""
     return render_template('index.html')
-@app.route('/', methods=['POST'])
+@app.route('/csgo', methods=['POST'])
 def index_post():
     """Это докстринг модуля, он однострочный."""
     csgo_map = request.form.get('csgo_map')
