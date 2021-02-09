@@ -9,7 +9,8 @@ itsdangerous==1.1.0
 Jinja2==2.11.3
 MarkupSafe==1.1.1
 requests==2.25.1
-selenium==3.141.0
 soupsieve==2.1
 urllib3==1.26.3
 Werkzeug==1.0.1
+pyvirtualdisplay==0.2.1
+selenium==3.3.1

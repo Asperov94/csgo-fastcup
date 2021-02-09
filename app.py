@@ -5,35 +5,52 @@ from flask import Flask
 from flask import request
 from flask import render_template
 from flask import send_file
-
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
 
 
-def csgomapname(csgo_map):
-    """Это докстринг модуля, он однострочный."""
+def show_url(csgo_map):
+    """парсит название матча """
     result = re.findall(r"match(.?.?.?.?.?.?.?)", csgo_map)
     print('REGULAR: ' + str(result) )
-    result = 'https://csgo.fastcup.net/match' + ''.join(result)
-    print (result)
-    return result
+    html_url_map = 'https://csgo.fastcup.net/match' + ''.join(result)
+    html_url_stat = html_url_map +'/stats'
+    print ('===='+html_url_map+'=====')
+    print ('===='+html_url_stat+'=====')
+    return html_url_map, html_url_stat
 
-def csgonamemap(csgo_map):
-    """Это докстринг модуля, он однострочный."""
-    driver = webdriver.Remote("http://selenium-chrome:4444/wd/hub", DesiredCapabilities.CHROME)
-    #driver = webdriver.Chrome()
-    driver.get(csgo_map)
-    main_page = driver.page_source
-
-    soup = BeautifulSoup(main_page, "html.parser")
+def driver_web(setmap, setstat):
+    driver = webdriver.Remote("http://standalone-chrome:4444/wd/hub", DesiredCapabilities.CHROME)
+    driver.get(setmap)
+    sleep(2)
+    setmap_html = driver.page_source
+    driver.get(setstat)
+    setstat_html= driver.page_source
     sleep(3)
     driver.quit()
 
+    #=======
+    soup_map_html = BeautifulSoup(setmap_html, "html.parser")
+    soup_stat_html = BeautifulSoup(setstat_html, "html.parser")
+    print('driver ok=========')
+    return soup_map_html, soup_stat_html
+
+
+
+def csgonamemap(soup):
+    print('===============================================csgo_map')
+
+
     for i in soup.find_all("div", {"class": "_2Fhou"}):
         print (i)
+     
     csgo_map_name = soup.findAll("div", {"class": "_2Fhou"})[2].text
+    if csgo_map_name == []:
+        print('FAIL')
 
     csgo_win = str(soup.find("span", {"class": "_3kfeE _2xoXg _2QNqw"}).text) + ':' + str(soup.find("span", {"class": "_3kfeE _1Wlu4"}).text)
     if int(soup.find("span", {"class": "_3kfeE _2xoXg _2QNqw"}).text) > int(soup.find("span", {"class": "_3kfeE _1Wlu4"}).text):
@@ -42,30 +59,29 @@ def csgonamemap(csgo_map):
         z=2 
     print (str(csgo_map_name))
     print (csgo_win)
+
     return csgo_map_name, csgo_win, z
 
-def csgo_read(csgo_map, csgonamemap1, csgo_win, z):
-    """Это докстринг модуля, он однострочный."""
+def csgo_read(soup, csgonamemap1, csgo_win, z):
+    """Парсит КДА """
+    print('KDA')
+
     #===VARIABLES===
     user=kill=dead=assist=''
 
     g=0
     #===---===
-    csgo_map = csgo_map + '/stats'
-    print('-=-=-=-=-=-=-csgo_read (csgo_map)=' + csgo_map)
-    driver = webdriver.Remote("http://selenium-chrome:4444/wd/hub", DesiredCapabilities.CHROME)
-    #driver = webdriver.Chrome()
-    driver.get(csgo_map)
-    main_page = driver.page_source
-    os.remove('csv.csv')
-    soup = BeautifulSoup(main_page, "html.parser")
-    sleep(4)
+    try:
+        os.remove('csv.csv')
+    except OSError:
+        print('not file')
+
     csv = open('csv.csv', 'w')
+
     print('stage4')
 
     print (soup.find_all("div", class_="_2Q_mv"))
-    if soup.find_all("div", class_="_2Q_mv") == []:
-        csgo_read(csgo_map, csgonamemap1, csgo_win, z)
+
     for i in soup.find_all("div", class_="_2Q_mv"):
         print (g)
         if z == 1 and g <6:
@@ -92,23 +108,26 @@ def csgo_read(csgo_map, csgonamemap1, csgo_win, z):
         print(f'{user};{kill};{dead};{assist};{csgonamemap1};{csgo_win};{csgo_false} \n')
         csgo_false='lost'
         g+=1
-    
-    csv.close()
-    driver.quit()
+  
 app = Flask(__name__)
 @app.route('/csgo', methods=['GET'])
 def index():
-    """Это докстринг модуля, он однострочный."""
+    """отдает html страницу"""
     return render_template('index.html')
 @app.route('/csgo', methods=['POST'])
 def index_post():
-    """Это докстринг модуля, он однострочный."""
-    csgo_map = request.form.get('csgo_map')
-    print('STAGE1' + csgo_map)
-    csgo_map = csgomapname(csgo_map)
-    print('STAGE2' + csgo_map)
-    csgonamemap1, csgo_win, z = csgonamemap(csgo_map)
-    csgo_read(csgo_map, csgonamemap1, csgo_win, z)
+    """отдает файл"""
+    data_url = request.form.get('csgo_map')
+    print('STAGE1' + data_url)
+    name_set_1, name_set_2 = show_url(data_url)
+    print ("=================")
+    soup_map_html, soup_stat_html = driver_web(name_set_1, name_set_2)
+    out1, out2, out3 =  csgonamemap(soup_map_html)
+    csgo_read( soup_stat_html ,out1, out2, out3)
+    
+
     return send_file(os.path.join("." , "csv.csv"), as_attachment=True)
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
+
+
