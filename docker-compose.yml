@@ -12,6 +12,7 @@ services:
     dns:
       - 8.8.8.8
 
+
   csgo:
     build: .
     ports:
