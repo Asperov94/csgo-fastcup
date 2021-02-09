@@ -8,11 +8,9 @@ services:
     networks:
       selenium:
     volumes:
-      - /dev/shm:/dev/shm 
+      - /dev/shm:/dev/shm
     dns:
       - 8.8.8.8
-
-
   csgo:
     build: .
     ports:
