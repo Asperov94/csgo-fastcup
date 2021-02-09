@@ -24,7 +24,7 @@ def show_url(csgo_map):
     return html_url_map, html_url_stat
 
 def driver_web(setmap, setstat):
-    driver = webdriver.Remote("http://standalone-chrome:4444/wd/hub", DesiredCapabilities.CHROME)
+    driver = webdriver.Remote("http://standalone-chrome:4444/wd/hub", DesiredCapabilities.OPERA)
     driver.get(setmap)
     sleep(2)
     setmap_html = driver.page_source
